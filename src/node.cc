@@ -764,7 +764,10 @@ int InitializeNodeWithArgs(std::vector<std::string>* argv,
                            std::vector<std::string>* exec_argv,
                            std::vector<std::string>* errors) {
   // Make sure InitializeNodeWithArgs() is called only once.
-  CHECK(!init_called.exchange(true));
+  if (init_called.exchange(true)) {
+    printf("Node was already started");
+    return 0;
+  }
 
   // Initialize node_start_time to get relative uptime.
   per_process::node_start_time = uv_hrtime();
